@@ -58,7 +58,7 @@ public class Qubit {
 	 * @param measurementBasis: The chosen basis to measure the qubit with.
 	 * @return the measurement output.
 	 */
-	public static int Mesure(Qubit qubit, Basis measurementBasis) {
+	public static int Measure(Qubit qubit, Basis measurementBasis) {
 		
 		if(qubit.getBasis() == measurementBasis)
 		{

@@ -9,7 +9,7 @@ public class Tests {
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 
-		BB84 protocolBB84 = new BB84(100);
+		BB84 protocolBB84 = new BB84(100000);
 		
 		Alice alice = new Alice();
 		Bob bob = new Bob();

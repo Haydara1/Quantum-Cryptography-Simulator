@@ -81,6 +81,7 @@ public class BB84 extends Protocol{
 	
 	/**
 	 * Ideal protocol simulation.
+	 * To be ignored.
 	 */
 	
 	@Override
@@ -91,22 +92,22 @@ public class BB84 extends Protocol{
 		
 		Util.printSeq(senderSeq);
 		
-		// Bob creates a random sequence of measurement basis:
+		// Bob creates a random sequence of measurement bases:
 		Basis[] receiverSeq = getRandomBasisSeq(this.getQbitsNum());
 		
 		Util.printSeq(receiverSeq);
 		
-		// Bob measures Alice's qubit using his basis:
+		// Bob measures Alice's qubit using his bases:
 		int[] measuredBits = new int[this.getQbitsNum()];
 		
 		for(int i = 0; i < this.getQbitsNum(); i++)
 		{
-			measuredBits[i] = Qubit.Mesure(senderSeq[i], receiverSeq[i]);
+			measuredBits[i] = Qubit.Measure(senderSeq[i], receiverSeq[i]);
 		}
 		
 		Util.printSeq(measuredBits);
 		
-		// Then, Bob sends his Basis sequence and Alice tells him which ones are the correct ones.
+		// Then, Bob sends his basis sequence and Alice tells him which ones are the correct ones.
 		
 		boolean[] correctBasis = new boolean[this.getQbitsNum()];
 		
@@ -160,6 +161,7 @@ public class BB84 extends Protocol{
 		 * Initialize:
 		 */
 		
+		// This channel should be authenticated
 		Communication publicChannel = new Communication("Public");
 		Communication quantumChannel = new Communication("Quantum");
 		
@@ -173,15 +175,18 @@ public class BB84 extends Protocol{
 		// Alice broadcasts its sequence in the public channel so Bob can measure it.
 		alice.broadcast(quantumChannel, alice.getQubitSequence());
 		
-		// Interception can happen here.
-		// TODO
+		Util.printSeq((Qubit[])quantumChannel.getLastCommunicatedObject());
 		
+		// Interception can happen here.
+		eve.intercept(quantumChannel);
+		
+		Util.printSeq((Qubit[])quantumChannel.getLastCommunicatedObject());
 		
 		/*
 		 * Measurement:
 		 */
 		
-		// Bob measures the Qubit Sequence with his Basis sequence.
+		// Bob measures the Qubit Sequence with his basis sequence.
 		
 		Qubit[] receivedSequence;
 		
@@ -199,24 +204,24 @@ public class BB84 extends Protocol{
 		
 		for(int i = 0; i < this.getQbitsNum(); i++)
 		{
-			measuredBits[i] = Qubit.Mesure(receivedSequence[i], bob.getBasisSequence()[i]);
+			measuredBits[i] = Qubit.Measure(receivedSequence[i], bob.getBasisSequence()[i]);
 		}
 		
 		/*
 		 * Establish punctured key.
 		 */
 		
-		// Bob sends to Alice the basis 
+		// Bob sends to Alice the bases 
 		bob.broadcast(publicChannel, bob.getBasisSequence());
 		
 		// Interception could happen here as well.
 		// TODO
 		
-		// Alice compares bob's Basis and hers to send him the correct chosen Basis:
+		// Alice compares bob's bases and hers to send him the correct chosen bases:
 		boolean[] correctBasis = getCorrectBasisSeq(alice.getQubitSequence(),
 				(Basis[])publicChannel.getLastCommunicatedObject());
 		
-		// Alice sends to bob the correct Basis sequence: 
+		// Alice sends to bob the correct basis sequence: 
 		alice.broadcast(publicChannel, correctBasis);
 		
 		// Bob compares his measured bit sequence (only for correct indices)
@@ -236,7 +241,7 @@ public class BB84 extends Protocol{
 		int index = 0, correctBasisIndex = semiCorrectBasisNum;
 		
 		while(correctBasisIndex > 0) {
-			// Case where bob guessed a correct Basis.
+			// Case where bob guessed a correct basis.
 			if(correctBasis[index]) {
 				
 				// Case where the measured bit doesn't match the theoretical bit.
@@ -279,6 +284,7 @@ public class BB84 extends Protocol{
 		
 		// End of the algorithm.
 		System.out.println(privateKey);
+		System.out.println("Error rate: " + String.valueOf(bitError));
 		
 	}
 	
@@ -317,7 +323,7 @@ public class BB84 extends Protocol{
 	
 	/**
 	 * Returns a random sequence of measurement basis
-	 * @param qubitNum; the desired number of basis.
+	 * @param qubitNum; the desired number of bases.
 	 * @return
 	 */
 	private static Basis[] getRandomBasisSeq(int qubitNum) {
@@ -345,7 +351,7 @@ public class BB84 extends Protocol{
 	 * Compares a basis sequence with a qubit sequence.
 	 * @param qubitSeq: the qubit sequence
 	 * @param basisSeq: the basis sequence
-	 * @return a boolean sequence where each element at an index i, shows if the two basis in that index match.
+	 * @return a boolean sequence where each element at an index i, shows if the two bases in that index match.
 	 */
 	private static boolean[] getCorrectBasisSeq(Qubit[] qubitSeq, Basis[] basisSeq) {
 		boolean[] seq = new boolean[qubitSeq.length];
@@ -358,9 +364,9 @@ public class BB84 extends Protocol{
 	
 	
 	/**
-	 * Returns the number of correct basis in a sequence.
+	 * Returns the number of correct bases in a sequence.
 	 * @param basisSeq a boolean sequence that represents the correct basis.
-	 * @return number of True elements in the above sequence.
+	 * @return the number of True elements in the above sequence.
 	 */
 	private static int getCorrectBasisNum(boolean[] basisSeq) {
 		int output = 0;
