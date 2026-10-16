@@ -22,9 +22,10 @@ public abstract class Protocol {
 	 * @param alice: Sender
 	 * @param bob: Receiver
 	 * @param eve: Spy
+	 * @return 
 	 * @throws Exception 
 	 */
-	public abstract void startProtocol(
+	public abstract String startProtocol(
 			Alice alice, Bob bob,
 			Eve eve) throws Exception;
 	

@@ -157,7 +157,7 @@ public class BB84 extends Protocol{
 	 * can only communicate through channels, which simulates real-world applications.
 	 */
 	@Override
-	public void startProtocol(Alice alice, Bob bob, Eve eve) throws Exception {
+	public String startProtocol(Alice alice, Bob bob, Eve eve) throws Exception {
 		
 		/*
 		 * Initialize:
@@ -260,9 +260,12 @@ public class BB84 extends Protocol{
 		
 		if(bitError > this.errorMargin)
 		{
-			System.out.println("Possibility of a spy was detected, key is discarded.");
-			System.out.println("Algorithm has failed.");
-			System.out.println("Error rate: " + String.valueOf(bitError));
+			// Testing: 
+			// System.out.println("Possibility of a spy was detected, key is discarded.");
+			// System.out.println("Algorithm has failed.");
+			// System.out.println("Error rate: " + String.valueOf(bitError));
+			
+			return null; // No key establishment.
 		}
 		else {
 		
@@ -271,7 +274,8 @@ public class BB84 extends Protocol{
 			 * If no spies are detected, the private key will be the rest of the correct bit sequence
 			 * (the ones that were not used in the punctured key).
 			 */
-			System.out.println("Algorithm success, no spies were detected!");
+			
+			// System.out.println("Algorithm success, no spies were detected!");
 			
 			StringBuilder privateKey = new StringBuilder("Private key: ");
 			
@@ -282,13 +286,13 @@ public class BB84 extends Protocol{
 			}
 			
 			// End of the algorithm.
-			System.out.println(privateKey);
-			System.out.println("Error rate: " + String.valueOf(bitError));
+			
+			// Testing
+			// System.out.println(privateKey);
+			// System.out.println("Error rate: " + String.valueOf(bitError));
+			
+			return String.valueOf(privateKey); // Private key established.
 		}
-		/*
-		 * End comparisons
-		 */
-		
 	}
 	
 	

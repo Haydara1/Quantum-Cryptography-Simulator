@@ -30,14 +30,14 @@ public class Communication {
 	{
 		this.name = "";
 		
-		System.out.println("Public channel started.");
+		//System.out.println("Public channel started.");
 	}
 	
 	public Communication(String _name) {
 		
 		this.name = _name;
 		
-		System.out.println("Public channel " + this.name + " has started.");
+		//System.out.println("Public channel " + this.name + " has started.");
 	}
 
 	/*

@@ -74,6 +74,7 @@ public class Eve extends Participant{
 				int bit = Qubit.Measure(qubitSequence[i], randomChosenBasis[i]);
 				
 				output[i] = new Qubit(bit, randomChosenBasis[i]);
+				
 			}
 			else 
 			{
