@@ -13,7 +13,7 @@ public class Tests {
 		
 		Alice alice = new Alice();
 		Bob bob = new Bob();
-		Eve eve = new Eve();
+		Eve eve = new Eve(0.445);
 		
 	
 		protocolBB84.startProtocol(alice, bob, eve);

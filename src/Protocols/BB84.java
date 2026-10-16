@@ -47,6 +47,8 @@ public class BB84 extends Protocol{
 	public BB84()
 	{
 		this.setQbitsNum(20); // Set 20 qbits as standard.
+		
+		this.errorMargin = 0.11;
 	}
 	
 	/**
@@ -56,7 +58,7 @@ public class BB84 extends Protocol{
 	public BB84(int _qbits) {
 		this.setQbitsNum(_qbits);
 		
-		this.errorMargin = 0;
+		this.errorMargin = 0.11;
 	}
 	
 	
@@ -175,12 +177,12 @@ public class BB84 extends Protocol{
 		// Alice broadcasts its sequence in the public channel so Bob can measure it.
 		alice.broadcast(quantumChannel, alice.getQubitSequence());
 		
-		Util.printSeq((Qubit[])quantumChannel.getLastCommunicatedObject());
+		//Util.printSeq((Qubit[])quantumChannel.getLastCommunicatedObject());
 		
 		// Interception can happen here.
 		eve.intercept(quantumChannel);
 		
-		Util.printSeq((Qubit[])quantumChannel.getLastCommunicatedObject());
+		//Util.printSeq((Qubit[])quantumChannel.getLastCommunicatedObject());
 		
 		/*
 		 * Measurement:
@@ -213,9 +215,6 @@ public class BB84 extends Protocol{
 		
 		// Bob sends to Alice the bases 
 		bob.broadcast(publicChannel, bob.getBasisSequence());
-		
-		// Interception could happen here as well.
-		// TODO
 		
 		// Alice compares bob's bases and hers to send him the correct chosen bases:
 		boolean[] correctBasis = getCorrectBasisSeq(alice.getQubitSequence(),
@@ -261,30 +260,34 @@ public class BB84 extends Protocol{
 		
 		if(bitError > this.errorMargin)
 		{
-			// TODO
+			System.out.println("Possibility of a spy was detected, key is discarded.");
+			System.out.println("Algorithm has failed.");
+			System.out.println("Error rate: " + String.valueOf(bitError));
 		}
+		else {
 		
+			/*
+			 * Establish private key
+			 * If no spies are detected, the private key will be the rest of the correct bit sequence
+			 * (the ones that were not used in the punctured key).
+			 */
+			System.out.println("Algorithm success, no spies were detected!");
+			
+			StringBuilder privateKey = new StringBuilder("Private key: ");
+			
+			for(int i = index; i < measuredBits.length; i++) {
+				
+				if(correctBasis[i])
+					privateKey.append(String.valueOf(measuredBits[i]));
+			}
+			
+			// End of the algorithm.
+			System.out.println(privateKey);
+			System.out.println("Error rate: " + String.valueOf(bitError));
+		}
 		/*
 		 * End comparisons
 		 */
-		
-		/*
-		 * Establish private key
-		 * If no spies are detected, the private key will be the rest of the correct bit sequence
-		 * (the ones that were not used in the punctured key).
-		 */
-		
-		StringBuilder privateKey = new StringBuilder("Private key: ");
-		
-		for(int i = index; i < measuredBits.length; i++) {
-			
-			if(correctBasis[i])
-				privateKey.append(String.valueOf(measuredBits[i]));
-		}
-		
-		// End of the algorithm.
-		System.out.println(privateKey);
-		System.out.println("Error rate: " + String.valueOf(bitError));
 		
 	}
 	

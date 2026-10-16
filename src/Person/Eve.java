@@ -6,14 +6,38 @@ import Quantum.Qubit;
 
 public class Eve extends Participant{
 
-	// TODO stock eve's basis sequence.
+	/*
+	 * Attributes
+	 */
+	private double interceptProbability;
 	
 	/*
 	 * Constructors: 
 	 */
 	
+	
+	/*
+	 * Getters and setters
+	 */
+	
+	public double getInterceptProbability() {
+		return interceptProbability;
+	}
+
+	public void setInterceptProbability(double interceptProbability) {
+		this.interceptProbability = interceptProbability;
+	}
+
 	public Eve() {
 		super("Eve");
+		
+		setInterceptProbability(Math.random());
+	}
+	
+	public Eve(double _interceptProbability) {
+		super("Eve");
+		
+		this.setInterceptProbability(_interceptProbability);
 	}
 	
 	/*
@@ -36,7 +60,6 @@ public class Eve extends Participant{
 	 * Private methods:
 	 */
 	
-	// TODO eve doesn't intercept all the qubit, get a random number of qubits to be intercepted.
 	private void intercept(Qubit[] qubitSequence, Communication communication) 
 	{
 		
@@ -46,9 +69,16 @@ public class Eve extends Participant{
 		
 		for(int i = 0; i < qubitSequence.length; i++) {
 			
-			int bit = Qubit.Measure(qubitSequence[i], randomChosenBasis[i]);
-			
-			output[i] = new Qubit(bit, randomChosenBasis[i]);
+			// Eve doesn't intercept all the qubits.
+			if(Math.random() <= this.getInterceptProbability()) {
+				int bit = Qubit.Measure(qubitSequence[i], randomChosenBasis[i]);
+				
+				output[i] = new Qubit(bit, randomChosenBasis[i]);
+			}
+			else 
+			{
+				output[i] = qubitSequence[i];
+			}
 		}
 		
 		this.broadcast(communication, output);
