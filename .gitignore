@@ -27,3 +27,6 @@ venv/
 # Temporary files
 *.log
 *.tmp
+
+# Maven generated
+target/
