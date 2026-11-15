@@ -25,20 +25,26 @@ The simulator currently implements **BB84**, one of the foundational protocols i
 
 ## 🚀 Getting Started
 
-### 📋 Prerequisites
+### Prerequisites
+- JDK 21 or later (matching the version configured in pom.xml).
 
-- A Java Development Kit (JDK).
-- A Java-compatible IDE, such as IntelliJ IDEA or Eclipse.
-
-### 📥 Installation
+### Build
 
 Clone the repository:
 
-```bash
-git clone https://github.com/Haydara1/Quantum-Cryptography-Simulator.git
-```
+    git clone https://github.com/Haydara1/Quantum-Cryptography-Simulator.git
 
-Open the project in your preferred Java IDE and build it.
+Enter the project directory:
+
+    cd Quantum-Cryptography-Simulator
+
+Compile:
+
+    ./mvnw clean compile
+
+### Run
+
+    ./mvnw exec:java
 
 ### ▶️ Running the Simulator
 
