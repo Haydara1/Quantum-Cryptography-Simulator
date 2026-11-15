@@ -6,6 +6,9 @@ bin/
 # Eclipse local workspace settings
 .metadata/
 .settings/org.eclipse.core.resources.prefs
+.settings
+.classpath
+.project
 
 # IntelliJ
 .idea/
