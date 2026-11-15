@@ -1,1 +1,29 @@
-/bin/
+
+# Compiled Java files
+*.class
+bin/
+target/
+
+# Eclipse local workspace settings
+.metadata/
+.settings/org.eclipse.core.resources.prefs
+
+# IntelliJ
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Temporary files
+*.log
+*.tmp
