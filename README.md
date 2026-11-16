@@ -12,6 +12,7 @@
 ## 📖 Table of Contents
 
 - [Overview](#-overview)
+- [Documentation and Resources](#-documentation-and-resources)
 - [The BB84 Protocol](#-the-bb84-protocol)
   - [The Participants](#the-participants)
   - [How It Works](#how-it-works)
@@ -28,7 +29,6 @@
   - [Data Collection](#data-collection)
   - [Python Analysis](#python-analysis)
   - [Theoretical Prediction](#theoretical-prediction)
-- [Documentation and Resources](#-documentation-and-resources)
 - [What I Learned](#-what-i-learned)
 - [Limitations](#-limitations)
 - [Future Improvements](#-future-improvements)
@@ -55,6 +55,18 @@ The main goals are:
 - Test the implementation through unit tests.
 - Compare experimental results with theoretical predictions.
 - Practise scientific computing and statistical data analysis.
+
+## 📚 Documentation and Resources
+
+The project is accompanied by additional material explaining the implementation and the experimental methodology.
+
+- **📖 Project blog:** [Read the complete project blog](https://haydara1.github.io/posts/Physics/BB84.html)
+- **📓 Jupyter notebook:** [Explore the experimental analysis](https://github.com/Haydara1/Quantum-Cryptography-Simulator/blob/master/results/Results.ipynb)
+- **💻 Source code:** [Browse the repository](https://github.com/Haydara1/Quantum-Cryptography-Simulator.git)
+
+The blog explains the motivation, theoretical foundations, implementation choices, and lessons learned.
+
+The notebook focuses on the experimental data, statistical analysis, and visualizations.
 
 ## ⚛️ The BB84 Protocol
 
@@ -166,11 +178,9 @@ Quantum-Cryptography-Simulator/
 │           ├── Person/
 │           └── Quantum/
 │
-├── notebooks/
-│   └── BB84_Experimental_Analysis.ipynb
-│
 ├── results/
 │   └── bb84_results.csv
+│   └── Results.ipynb
 │
 ├── pom.xml
 ├── mvnw
@@ -351,18 +361,6 @@ For example:
 | 100% | 25% |
 
 The experimental results should fluctuate around these expected values due to the finite number of simulated qubits.
-
-## 📚 Documentation and Resources
-
-The project is accompanied by additional material explaining the implementation and the experimental methodology.
-
-- **📖 Project blog:** [Read the complete project article](YOUR_QUARTO_BLOG_LINK)
-- **📓 Jupyter notebook:** [Explore the experimental analysis](YOUR_JUPYTER_NOTEBOOK_LINK)
-- **💻 Source code:** [Browse the repository](https://github.com/Haydara1/Quantum-Cryptography-Simulator)
-
-The blog explains the motivation, theoretical foundations, implementation choices, and lessons learned.
-
-The notebook focuses on the experimental data, statistical analysis, and visualizations.
 
 ## 🧠 What I Learned
 
