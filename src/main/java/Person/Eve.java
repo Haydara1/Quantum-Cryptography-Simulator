@@ -31,11 +31,19 @@ public class Eve extends Participant{
 	public Eve() {
 		super("Eve");
 		
-		setInterceptProbability(Math.random());
+		setInterceptProbability(0);
 	}
 	
 	public Eve(double _interceptProbability) {
 		super("Eve");
+		
+		if (_interceptProbability < 0 ||
+			_interceptProbability > 1 ||
+	        !Double.isFinite(_interceptProbability)) {
+			
+		        throw new IllegalArgumentException("Probability must be between 0 and 1.");
+		    }
+		
 		
 		this.setInterceptProbability(_interceptProbability);
 	}
@@ -70,7 +78,7 @@ public class Eve extends Participant{
 		for(int i = 0; i < qubitSequence.length; i++) {
 			
 			// Eve doesn't intercept all the qubits.
-			if(Math.random() <= this.getInterceptProbability()) {
+			if(Math.random() < this.getInterceptProbability()) {
 				int bit = Qubit.Measure(qubitSequence[i], randomChosenBasis[i]);
 				
 				output[i] = new Qubit(bit, randomChosenBasis[i]);
