@@ -105,22 +105,22 @@ When Alice and Bob later compare their matching-basis measurements, this disturb
 For an ideal intercept-resend attack, the expected QBER among sifted bits is:
 
 $$
-\boxed{QBER = \frac{p_{\mathrm{Eve}}}{4}}
+QBER = \frac{p_{\mathrm{Eve}}}{4}
 $$
 
 where $p_{\mathrm{Eve}}$ is the probability that Eve intercepts a transmitted qubit.
 
 The reasoning is:
 
-- Eve intercepts a qubit with probability \(p_{\mathrm{Eve}}\).
-- She chooses the wrong basis with probability \(1/2\).
-- Bob obtains an incorrect bit with probability \(1/2\) in that case.
+- Eve intercepts a qubit with probability $p_{\mathrm{Eve}}$.
+- She chooses the wrong basis with probability $1/2$.
+- Bob obtains an incorrect bit with probability $1/2$ in that case.
 
 Therefore:
 
-\[
+$$
 QBER = p_{\mathrm{Eve}} \times \frac12 \times \frac12
-\]
+$$
 
 This theoretical prediction provides a useful reference for validating the simulation.
 
@@ -304,18 +304,18 @@ The notebook explores the experimental data through several visualizations.
 
 Compare the measured error rate with the theoretical prediction:
 
-\[
+$$
 QBER = \frac{p_{\mathrm{Eve}}}{4}
-\]
+$$
 
 **2. Protocol acceptance rate**
 
 Investigate how frequently the protocol accepts a potential key as Eve's interception probability increases.
 
-\[
+$$
 P(\mathrm{accept}) =
 \frac{\text{Accepted experiments}}{\text{Total experiments}}
-\]
+$$
 
 **3. QBER distribution**
 
@@ -335,9 +335,9 @@ These experiments demonstrate how repeated simulations can be used to investigat
 
 For the ideal intercept-resend attack:
 
-\[
+$$
 QBER = \frac{p_{\mathrm{Eve}}}{4}
-\]
+$$
 
 For example:
 
