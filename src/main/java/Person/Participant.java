@@ -8,7 +8,7 @@ public abstract class Participant {
 	 * Attributes
 	 */
 	
-	private String name;
+	private final String name;
 	
 	/*
 	 * Constructors

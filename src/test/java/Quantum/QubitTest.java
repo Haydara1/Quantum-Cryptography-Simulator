@@ -1,13 +1,13 @@
 package Quantum;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 
 class QubitTest {
 
     @Test
     void measurementWithSameBasisReturnsOriginalBit() {
-
         Qubit qubit = new Qubit(1, Basis.PLUS);
 
         int result = Qubit.Measure(qubit, Basis.PLUS);
@@ -17,7 +17,6 @@ class QubitTest {
 
     @Test
     void measurementWithSameBasisReturnsZero() {
-
         Qubit qubit = new Qubit(0, Basis.TIMES);
 
         int result = Qubit.Measure(qubit, Basis.TIMES);
@@ -27,11 +26,25 @@ class QubitTest {
 
     @Test
     void measurementWithDifferentBasisReturnsValidBit() {
-
         Qubit qubit = new Qubit(1, Basis.PLUS);
 
         int result = Qubit.Measure(qubit, Basis.TIMES);
 
         assertTrue(result == 0 || result == 1);
+    }
+
+    @Test
+    void qubitStoresItsInitialProperties() {
+        Qubit qubit = new Qubit(1, Basis.TIMES);
+
+        assertEquals(1, qubit.getBit());
+        assertEquals(Basis.TIMES, qubit.getBasis());
+    }
+
+    @Test
+    void toStringReturnsExpectedRepresentation() {
+        Qubit qubit = new Qubit(1, Basis.PLUS);
+
+        assertEquals("<1|PLUS>", qubit.toString());
     }
 }
