@@ -5,6 +5,12 @@ package Protocols;
  * https://fr.wikipedia.org/wiki/Protocole_BB84
  */
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+
 import Quantum.Basis;
 import Quantum.Qubit;
 import Quantum.Util;
@@ -14,6 +20,8 @@ import Person.Bob;
 import Person.Eve;
 
 import Quantum.Communication;
+
+import Experiment.BB84Result;
 
 public class BB84 extends Protocol{
 
@@ -25,6 +33,10 @@ public class BB84 extends Protocol{
 	
 	// The percentage of error allowed in punctured key verification.
 	private double errorMargin;
+	
+	
+	// Used to randomize the sample of sifted bits.
+    private final Random random = new Random();
 	
 	/*
 	 * Getters and Setters
@@ -294,6 +306,138 @@ public class BB84 extends Protocol{
 			return String.valueOf(privateKey); // Private key established.
 		}
 	}
+	
+	
+	/**
+	 * This function runs exactly the same as String startProtocol, but outputs all the distribution details.
+	 * @param alice
+	 * @param bob
+	 * @param eve
+	 * @param experimentId
+	 * @return BB84Result containing all details about the experiment.
+	 */
+    public BB84Result runExperiment( Alice alice, Bob bob,
+            Eve eve, int experimentId) {
+
+        Objects.requireNonNull(alice, "Alice cannot be null.");
+        Objects.requireNonNull(bob, "Bob cannot be null.");
+        Objects.requireNonNull(eve, "Eve cannot be null.");
+
+        Communication publicChannel = new Communication("Public");
+
+        Communication quantumChannel = new Communication("Quantum");
+
+        // 1. Alice prepares her qubits.
+        alice.setQubitSequence(getRandomQubitSeq(qbitsNum));
+
+        // 2. Bob chooses his measurement bases.
+        bob.setBasisSequence(getRandomBasisSeq(qbitsNum));
+
+        // 3. Alice sends the qubits.
+        alice.broadcast(quantumChannel, alice.getQubitSequence());
+
+        // 4. Eve potentially intercepts the transmission.
+        eve.intercept(quantumChannel);
+
+        if (!(quantumChannel.getLastCommunicatedObject()
+                instanceof Qubit[])) {
+            throw new IllegalStateException(
+                "Expected a Qubit sequence."
+            );
+        }
+
+        Qubit[] receivedSequence =
+            (Qubit[]) quantumChannel.getLastCommunicatedObject();
+
+        if (receivedSequence.length != qbitsNum) {
+            throw new IllegalStateException(
+                "Received sequence has an unexpected length."
+            );
+        }
+
+        // 5. Bob measures the received qubits.
+        int[] measuredBits = new int[qbitsNum];
+
+        for (int i = 0; i < qbitsNum; i++) {
+            measuredBits[i] = Qubit.Measure(
+                receivedSequence[i],
+                bob.getBasisSequence()[i]
+            );
+        }
+
+        // 6. Alice and Bob compare their bases.
+        bob.broadcast(publicChannel,bob.getBasisSequence());
+
+        boolean[] correctBasis = getCorrectBasisSeq(
+            alice.getQubitSequence(),
+            (Basis[]) publicChannel.getLastCommunicatedObject()
+        );
+
+        // 7. Build the list of sifted positions.
+        List<Integer> siftedIndices = new ArrayList<>();
+
+        for (int i = 0; i < qbitsNum; i++) {
+            if (correctBasis[i]) {
+                siftedIndices.add(i);
+            }
+        }
+
+        int siftedBits = siftedIndices.size();
+
+        // 8. Randomly select half of the sifted bits for testing.
+        Collections.shuffle(siftedIndices, random);
+
+        int sampleBits = siftedBits / 2;
+
+        int errors = 0;
+
+        for (int i = 0; i < sampleBits; i++) {
+
+            int index = siftedIndices.get(i);
+
+            if (alice.getQubitSequence()[index].getBit()
+                    != measuredBits[index]) {
+                errors++;
+            }
+        }
+
+        // 9. Calculate QBER.
+        double qber = sampleBits == 0
+                ? Double.NaN
+                : (double) errors / sampleBits;
+
+        // 10. Build the remaining potential key.
+        StringBuilder privateKey = new StringBuilder();
+
+        for (int i = sampleBits; i < siftedBits; i++) {
+
+            int index = siftedIndices.get(i);
+
+            privateKey.append(measuredBits[index]);
+        }
+
+        boolean accepted =
+                sampleBits > 0 && qber <= errorMargin;
+
+        String key = accepted
+                ? privateKey.toString()
+                : "";
+
+        return new BB84Result(
+            experimentId,
+            eve.getInterceptProbability(),
+            qbitsNum,
+            siftedBits,
+            sampleBits,
+            errors,
+            qber,
+            privateKey.length(),
+            accepted,
+            key
+        );
+    }
+
+    
 	
 	
 	/*
